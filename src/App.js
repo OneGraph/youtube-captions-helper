@@ -24,7 +24,7 @@ class App extends Component {
     checkingAuth: true,
     isLoggedIn: null,
     videoInput: '',
-    videoId: null,
+    videoId: null, // videoId for testing 'YX40hbAHx3s'
   };
   _oneGraphAuth = new OneGraphAuth({
     appId: APP_ID,

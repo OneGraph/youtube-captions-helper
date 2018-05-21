@@ -68,13 +68,24 @@ class Captions extends Component {
               caption.snippet.status === 'serving' &&
               caption.snippet.language === 'en',
           );
+          const re = new RegExp(this.state.filterString, 'im');
           const captionLines = caption.body
             .split('\n\n')
-            .map(line => line.split('\n'));
+            .map(line => line.split('\n'))
+            .filter(line => (line[1] || '').match(re));
 
           return (
             <div>
               <h3>{data.youTube.video.snippet.title}</h3>
+              <span>
+                Filter{' '}
+                <input
+                  style={{fontSize: 14, margin: '8px 0', padding: 4}}
+                  type="text"
+                  value={this.state.filterString}
+                  onChange={this._handleFilterInput}
+                />
+              </span>
               <table>
                 <thead>
                   <tr>
