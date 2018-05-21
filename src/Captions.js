@@ -1,6 +1,7 @@
 import {gql} from 'apollo-boost';
 import {Query} from 'react-apollo';
 import React, {Component} from 'react';
+import YouTubePlayer from 'react-player/lib/players/YouTube';
 
 const GET_VIDEO = gql`
   query VideoWithCaptionsQuery($videoId: String!) {
@@ -28,7 +29,7 @@ function videoUrl(id, {hour, minute, second}) {
   return `https://youtube.com/watch?v=${id}&t=${hour}h${minute}m${second}s`;
 }
 
-const Timestamp = ({videoId, timestampText}) => {
+const Timestamp = ({videoId, timestampText, seekTo}) => {
   const [start] = timestampText.split(',');
   const [startHour, startMinute, startSecond] = start
     .split(':')
@@ -37,6 +38,11 @@ const Timestamp = ({videoId, timestampText}) => {
     <span>
       <a
         target="_blank"
+        onClick={e => {
+          e.preventDefault();
+          const seconds = startHour * 60 * 60 + startMinute * 60 + startSecond;
+          seekTo(seconds);
+        }}
         href={videoUrl(videoId, {
           hour: startHour,
           minute: startMinute,
@@ -54,6 +60,12 @@ class Captions extends Component {
   };
   _handleFilterInput = event => {
     this.setState({filterString: event.target.value});
+  };
+
+  _seekTo = seconds => {
+    if (this._player) {
+      this._player.seekTo(seconds);
+    }
   };
 
   render() {
@@ -76,9 +88,16 @@ class Captions extends Component {
 
           return (
             <div>
+              <YouTubePlayer
+                ref={ref => {
+                  this._player = ref;
+                }}
+                url={`https://www.youtube.com/watch?v=${this.props.videoId}`}
+                controls
+              />
               <h3>{data.youTube.video.snippet.title}</h3>
               <span>
-                Filter{' '}
+                Search{' '}
                 <input
                   style={{fontSize: 14, margin: '8px 0', padding: 4}}
                   type="text"
@@ -100,6 +119,7 @@ class Captions extends Component {
                         <Timestamp
                           videoId={this.props.videoId}
                           timestampText={timestamp}
+                          seekTo={this._seekTo}
                         />
                       </td>
                       <td style={{textAlign: 'left', padding: 4}}>{text}</td>
