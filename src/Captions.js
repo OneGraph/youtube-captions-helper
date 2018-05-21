@@ -24,7 +24,38 @@ const GET_VIDEO = gql`
   }
 `;
 
+function videoUrl(id, {hour, minute, second}) {
+  return `https://youtube.com/watch?v=${id}&t=${hour}h${minute}m${second}s`;
+}
+
+const Timestamp = ({videoId, timestampText}) => {
+  const [start] = timestampText.split(',');
+  const [startHour, startMinute, startSecond] = start
+    .split(':')
+    .map(s => parseInt(s, 10));
+  return (
+    <span>
+      <a
+        target="_blank"
+        href={videoUrl(videoId, {
+          hour: startHour,
+          minute: startMinute,
+          second: startSecond,
+        })}>
+        {start}
+      </a>
+    </span>
+  );
+};
+
 class Captions extends Component {
+  state = {
+    filterString: '',
+  };
+  _handleFilterInput = event => {
+    this.setState({filterString: event.target.value});
+  };
+
   render() {
     return (
       <Query query={GET_VIDEO} variables={{videoId: this.props.videoId}}>
@@ -47,7 +78,7 @@ class Captions extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th style={{textAlign: 'right', padding: 4}}>Timestamps</th>
+                    <th style={{textAlign: 'right', padding: 4}}>Timestamp</th>
                     <th style={{textAlign: 'left', padding: 4}}>Text</th>
                   </tr>
                 </thead>
@@ -55,7 +86,10 @@ class Captions extends Component {
                   {captionLines.map(([timestamp, text]) => (
                     <tr>
                       <td style={{textAlign: 'right', padding: 4}}>
-                        {timestamp}
+                        <Timestamp
+                          videoId={this.props.videoId}
+                          timestampText={timestamp}
+                        />
                       </td>
                       <td style={{textAlign: 'left', padding: 4}}>{text}</td>
                     </tr>
