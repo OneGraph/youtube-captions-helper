@@ -19,6 +19,16 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const VIDEO_IDS = [
+  'UBGzsb2UkeY',
+  'u1E0CbGeICo',
+  'DNPVqK_woRQ',
+  'PHabPhgRUuU',
+  'U2NKoStGBvE',
+  'VYpJ9pfugM8',
+  't6CRZ-iG39g',
+];
+
 class App extends Component {
   state = {
     checkingAuth: true,
@@ -49,6 +59,10 @@ class App extends Component {
       this.setState({videoId: this.state.videoInput});
     }
   };
+  _tryVideo = () => {
+    const videoId = VIDEO_IDS[Math.floor(Math.random() * VIDEO_IDS.length)];
+    this.setState({videoId, videoInput: videoId});
+  };
   render() {
     if (this.state.checkingAuth) {
       return <div className="App">Checking if logged in...</div>;
@@ -67,15 +81,24 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <div className="App">
-          <div>Enter a YouTube video id</div>
-          <input
-            style={{fontSize: 14, margin: '8px 0', padding: 4}}
-            type="text"
-            placeholder="e.g. YX40hbAHx3s"
-            onChange={this._handleVideoInputChange}
-            onKeyPress={this._handleKeyPress}
-            value={this.state.videoInput}
-          />
+          <div>
+            Enter a YouTube video id or{' '}
+            <span
+              style={{cursor: 'pointer', color: 'blue'}}
+              onClick={this._tryVideo}>
+              load a random video
+            </span>
+          </div>
+          <span>
+            <input
+              style={{fontSize: 14, margin: '8px 0', padding: 4}}
+              type="text"
+              placeholder="e.g. YX40hbAHx3s"
+              onChange={this._handleVideoInputChange}
+              onKeyPress={this._handleKeyPress}
+              value={this.state.videoInput}
+            />
+          </span>
           {this.state.videoId ? (
             <Captions videoId={this.state.videoId} />
           ) : null}
