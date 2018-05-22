@@ -75,11 +75,29 @@ class Captions extends Component {
           if (loading) return <div>Loading video...</div>;
           if (error)
             return <div>Uh oh, something went wrong: {error.message}</div>;
+          if (!data.youTube.video) {
+            return <div>Could not find a video with that id.</div>;
+          }
           const caption = data.youTube.video.captions.items.find(
             caption =>
               caption.snippet.status === 'serving' &&
               caption.snippet.language === 'en',
           );
+          if (!caption || !caption.body) {
+            return (
+              <div>
+                <YouTubePlayer
+                  ref={ref => {
+                    this._player = ref;
+                  }}
+                  url={`https://www.youtube.com/watch?v=${this.props.videoId}`}
+                  controls
+                />
+                <h3>{data.youTube.video.snippet.title}</h3>
+                       <div>Could not find captions for this video {'\uD83D\uDE15'}</div>
+              </div>
+            );
+          }
           const re = new RegExp(this.state.filterString, 'im');
           const captionLines = caption.body
             .split('\n\n')
