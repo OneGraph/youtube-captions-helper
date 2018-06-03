@@ -1,7 +1,5 @@
 import {ApolloProvider} from 'react-apollo';
-import {ApolloClient} from 'apollo-client';
-import {HttpLink} from 'apollo-link-http';
-import {InMemoryCache} from 'apollo-cache-inmemory';
+import OneGraphApolloClient from 'onegraph-apollo-client';
 import OneGraphAuth from 'onegraph-auth';
 import Captions from './Captions';
 
@@ -9,15 +7,6 @@ import React, {Component} from 'react';
 import './App.css';
 
 const APP_ID = '80397fc4-412c-4c68-a103-5acc3d7a9287';
-
-const client = new ApolloClient({
-  link: new HttpLink({
-    uri: 'https://serve.onegraph.com/dynamic?app_id=' + APP_ID,
-    headers: {'Content-Type': 'application/json'},
-    credentials: 'include',
-  }),
-  cache: new InMemoryCache(),
-});
 
 const VIDEO_IDS = [
   'UBGzsb2UkeY',
@@ -36,18 +25,24 @@ class App extends Component {
     videoInput: '',
     videoId: null, // videoId for testing 'YX40hbAHx3s'
   };
-  _oneGraphAuth = new OneGraphAuth({
-    appId: APP_ID,
-    service: 'google',
-  });
+
+  constructor(props) {
+    super(props);
+    this._oneGraphAuth = new OneGraphAuth({
+      appId: APP_ID,
+    });
+    this._oneGraphClient = new OneGraphApolloClient({
+      oneGraphAuth: this._oneGraphAuth,
+    });
+  }
   _authWithGoogle = async () => {
     this.setState({checkingAuth: true});
-    await this._oneGraphAuth.login();
-    const isLoggedIn = await this._oneGraphAuth.isLoggedIn();
+    await this._oneGraphAuth.login('google');
+    const isLoggedIn = await this._oneGraphAuth.isLoggedIn('google');
     this.setState({isLoggedIn: isLoggedIn, checkingAuth: false});
   };
   componentDidMount() {
-    this._oneGraphAuth.isLoggedIn().then(isLoggedIn => {
+    this._oneGraphAuth.isLoggedIn('google').then(isLoggedIn => {
       this.setState({isLoggedIn, checkingAuth: false});
     });
   }
@@ -79,7 +74,7 @@ class App extends Component {
       );
     }
     return (
-      <ApolloProvider client={client}>
+      <ApolloProvider client={this._oneGraphClient}>
         <div className="App">
           <div>
             Enter a YouTube video id or{' '}
