@@ -4940,9 +4940,9 @@ onegraph-apollo-client@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/onegraph-apollo-client/-/onegraph-apollo-client-0.2.0.tgz#05d403cabebebf9e71fffd6583c136ea8fc752c4"
 
-onegraph-auth@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/onegraph-auth/-/onegraph-auth-0.2.0.tgz#ba0dcc38ee0541a542b4efed808a7afe1e4e3895"
+onegraph-auth@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/onegraph-auth/-/onegraph-auth-0.2.3.tgz#9ce130dacce5a265657cbb01f26759c102d90935"
   dependencies:
     idx "^2.2.0"
     regenerator-runtime "^0.11.1"

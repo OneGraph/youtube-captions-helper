@@ -35,14 +35,14 @@ class App extends Component {
       oneGraphAuth: this._oneGraphAuth,
     });
   }
-  _authWithGoogle = async () => {
+  _authWithYoutube = async () => {
     this.setState({checkingAuth: true});
-    await this._oneGraphAuth.login('google');
-    const isLoggedIn = await this._oneGraphAuth.isLoggedIn('google');
+    await this._oneGraphAuth.login('youtube');
+    const isLoggedIn = await this._oneGraphAuth.isLoggedIn('youtube');
     this.setState({isLoggedIn: isLoggedIn, checkingAuth: false});
   };
   componentDidMount() {
-    this._oneGraphAuth.isLoggedIn('google').then(isLoggedIn => {
+    this._oneGraphAuth.isLoggedIn('youtube').then(isLoggedIn => {
       this.setState({isLoggedIn, checkingAuth: false});
     });
   }
@@ -67,8 +67,8 @@ class App extends Component {
         <div className="App">
           <button
             style={{fontSize: 14, cursor: 'pointer'}}
-            onClick={this._authWithGoogle}>
-            Login with Google
+            onClick={this._authWithYoutube}>
+            Login with YouTube
           </button>
         </div>
       );
