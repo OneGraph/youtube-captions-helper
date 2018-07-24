@@ -23,6 +23,31 @@
   font-size: large;
 }
 
+.youtube-signin-button {
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 3px solid #bbb; /* rgb(72, 133, 237, 0.4); */
+  color: #333;
+  margin: auto;
+}
+
+.youtube-signin-button:hover {
+  background: #333;
+  color: #ddd;
+}
+
+.youtube-signin-button img {
+  width: 32px;
+  margin-left: 12px;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

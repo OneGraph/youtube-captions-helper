@@ -2,6 +2,7 @@ import {ApolloProvider} from 'react-apollo';
 import OneGraphApolloClient from 'onegraph-apollo-client';
 import OneGraphAuth from 'onegraph-auth';
 import Captions from './Captions';
+import youtubeLogo from './youtubeLogo.svg';
 
 import React, {Component} from 'react';
 import './App.css';
@@ -18,12 +19,16 @@ const VIDEO_IDS = [
   't6CRZ-iG39g',
 ];
 
+function randomVideoId() {
+  return VIDEO_IDS[Math.floor(Math.random() * VIDEO_IDS.length)];
+}
+
 class App extends Component {
   state = {
     checkingAuth: true,
     isLoggedIn: null,
     videoInput: '',
-    videoId: null, // videoId for testing 'YX40hbAHx3s'
+    videoId: randomVideoId(),
   };
 
   constructor(props) {
@@ -37,9 +42,13 @@ class App extends Component {
   }
   _authWithYoutube = async () => {
     this.setState({checkingAuth: true});
-    await this._oneGraphAuth.login('youtube');
-    const isLoggedIn = await this._oneGraphAuth.isLoggedIn('youtube');
-    this.setState({isLoggedIn: isLoggedIn, checkingAuth: false});
+    try {
+      await this._oneGraphAuth.login('youtube');
+      const isLoggedIn = await this._oneGraphAuth.isLoggedIn('youtube');
+      this.setState({isLoggedIn: isLoggedIn, checkingAuth: false});
+    } catch(e) {
+      this.setState({isLoggedIn: false, checkingAuth: false});
+    }
   };
   componentDidMount() {
     this._oneGraphAuth.isLoggedIn('youtube').then(isLoggedIn => {
@@ -55,20 +64,21 @@ class App extends Component {
     }
   };
   _tryVideo = () => {
-    const videoId = VIDEO_IDS[Math.floor(Math.random() * VIDEO_IDS.length)];
+    const videoId = randomVideoId();
     this.setState({videoId, videoInput: videoId});
   };
   render() {
     if (this.state.checkingAuth) {
-      return <div className="App">Checking if logged in...</div>;
+      return null;
     }
     if (!this.state.isLoggedIn) {
       return (
         <div className="App">
           <button
-            style={{fontSize: 14, cursor: 'pointer'}}
+            className="youtube-signin-button"
             onClick={this._authWithYoutube}>
             Login with YouTube
+            <img src={youtubeLogo} />
           </button>
         </div>
       );
