@@ -78,7 +78,7 @@ class App extends Component {
             className="youtube-signin-button"
             onClick={this._authWithYoutube}>
             Login with YouTube
-            <img src={youtubeLogo} />
+            <img alt="youtube logo" src={youtubeLogo} />
           </button>
         </div>
       );
