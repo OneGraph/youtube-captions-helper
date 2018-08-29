@@ -70,7 +70,10 @@ class Captions extends Component {
 
   render() {
     return (
-      <Query query={GET_VIDEO} variables={{videoId: this.props.videoId}}>
+      <Query
+        query={GET_VIDEO}
+        variables={{videoId: this.props.videoId}}
+        errorPolicy="all">
         {({loading, error, data}) => {
           if (loading) return <div>Loading video...</div>;
           if (!data && error)
@@ -94,7 +97,9 @@ class Captions extends Component {
                   controls
                 />
                 <h3>{data.youTube.video.snippet.title}</h3>
-                       <div>Could not find captions for this video {'\uD83D\uDE15'}</div>
+                <div>
+                  Could not find captions for this video {'\uD83D\uDE15'}
+                </div>
               </div>
             );
           }
