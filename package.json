@@ -4,10 +4,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "apollo-boost": "^0.1.6",
+    "apollo-boost": "^0.1.13",
     "graphql": "^0.13.2",
-    "onegraph-auth": "0.2.3",
-    "onegraph-apollo-client": "0.2.0",
+    "onegraph-auth": "0.2.12",
+    "onegraph-apollo-client": "0.2.12",
     "react": "^16.3.2",
     "react-apollo": "^2.1.0-beta.3",
     "react-dom": "^16.3.2",

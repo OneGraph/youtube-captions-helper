@@ -73,7 +73,7 @@ class Captions extends Component {
       <Query query={GET_VIDEO} variables={{videoId: this.props.videoId}}>
         {({loading, error, data}) => {
           if (loading) return <div>Loading video...</div>;
-          if (error)
+          if (!data && error)
             return <div>Uh oh, something went wrong: {error.message}</div>;
           if (!data.youTube.video) {
             return <div>Could not find a video with that id.</div>;
